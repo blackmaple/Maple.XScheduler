@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Maple.WindowsRuntimes/Maple.WindowsRuntimes.csproj" />
+  <Project Path="Maple.XScheduler.SetTimer/Maple.XScheduler.SetTimer.csproj" />
+  <Project Path="Maple.XScheduler.WinMsg/Maple.XScheduler.WinMsg.csproj" />
+  <Project Path="Maple.XScheduler/Maple.XScheduler.csproj" />
+</Solution>
