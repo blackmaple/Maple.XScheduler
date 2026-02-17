@@ -33,7 +33,7 @@ namespace Maple.XScheduler
         }
 
         public static implicit operator MPinned<T>(T obj) => new(obj);
-        public static implicit operator nint(MPinned<T> obj) => obj.Pointer;
+        public static implicit operator nint(MPinned<T> obj) => obj.Handle;
 
     }
 

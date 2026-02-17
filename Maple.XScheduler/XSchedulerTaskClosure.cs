@@ -8,7 +8,7 @@
         public nint Handle => Pinned.Handle;
         public XSchedulerTaskClosure()
         {
-            Pinned = new MPinned<XSchedulerTask>(this);
+            Pinned = new MPinned<XSchedulerTaskClosure>(this);
         }
 
         public abstract void TryExecute();

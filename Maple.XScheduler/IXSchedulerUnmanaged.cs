@@ -1,6 +1,6 @@
 ﻿namespace Maple.XScheduler
 {
-    public interface IXSchedulerService
+    public interface IXSchedulerUnmanaged
     {
         ValueTask<bool> ExecAsync(XSchedulerTaskClosure closure);
     }

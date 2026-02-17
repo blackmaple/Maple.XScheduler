@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Maple.WindowsRuntimes\Maple.WindowsRuntimes.csproj" />
+    <ProjectReference Include="..\Maple.XScheduler\Maple.XScheduler.csproj" />
+  </ItemGroup>
+
 </Project>
