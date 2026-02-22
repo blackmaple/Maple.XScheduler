@@ -16,22 +16,22 @@ namespace Maple.XScheduler.WinMsg
     }
 
 
-    public class UnmanagedWindowsMsgLoopHook(ILogger<UnmanagedWindowsMsgLoopHook> logger )
+    public class UnmanagedWindowsMsgLoopHook(ILogger<UnmanagedWindowsMsgLoopHook> logger ): IUnmanagedWindowsMsgLoopHook
     {
         public ILogger Logger { get; } = logger;
-        
-        public Func<WindowsMsgInfo,ValueTask>? NotifyAsync { set; get; }
+
+        public Func<WindowsMsgInfo, ValueTask> NotifyAsync { set; get; } =  static (_) => ValueTask.CompletedTask;
 
 
 
     }
 
-    class UnmanagedWindowsMsgChannelService(UnmanagedWindowsMsgLoopHook hook)
+    class UnmanagedWindowsMsgChannelService(IUnmanagedWindowsMsgLoopHook hook)
     {
         Channel<WindowsMsgInfo> MsgChannel { get; } = Channel.CreateUnbounded<WindowsMsgInfo>();
-        UnmanagedWindowsMsgLoopHook Hook { get; } = hook;
+        IUnmanagedWindowsMsgLoopHook Hook { get; } = hook;
         ILogger Logger => Hook.Logger;
-        IWindowsMsgNotifyService MsgNotifyService => Hook.MsgNotifyService;
+        Func<WindowsMsgInfo, ValueTask> NotifyAsync => Hook.NotifyAsync;
 
         public ValueTask WriteMsgAsync(WindowsMsgInfo info) => this.MsgChannel.Writer.WriteAsync(info);
         public bool TryWriteMsg(WindowsMsgInfo info) => this.MsgChannel.Writer.TryWrite(info);
@@ -48,7 +48,7 @@ namespace Maple.XScheduler.WinMsg
                
                 try
                 {
-                    await MsgNotifyService.NotifyAsync(dto).ConfigureAwait(false);
+                    await NotifyAsync.Invoke(dto).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -63,8 +63,10 @@ namespace Maple.XScheduler.WinMsg
 
     public static class XSchedulerUnmanagedExtensions
     {
-        public static IServiceCollection AddWindowsMsgLoopHook<[DynamicallyAccessedMembers]T>(this IServiceCollection @this)
+        public static IServiceCollection AddWindowsMsgLoopHook(this IServiceCollection @this)
         {
+            @this.AddSingleton<IUnmanagedWindowsMsgLoopHook,UnmanagedWindowsMsgLoopHook>();
+            @this.AddSingleton<UnmanagedWindowsMsgChannelService>();
             return @this;
         }
     }
