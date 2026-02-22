@@ -1,6 +1,6 @@
 ﻿namespace Maple.WindowsRuntimes
 {
-    public enum EnumWindowMessage : uint
+    public enum EnumWindowMsgCode : uint
     {
         WM_DESTROY = 0x0002,
         WM_QUIT = 0x0012,

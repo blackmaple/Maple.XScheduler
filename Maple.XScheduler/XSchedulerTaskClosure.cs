@@ -1,29 +1,16 @@
-﻿namespace Maple.XScheduler
+﻿using Maple.UnmanagedExtensions;
+
+namespace Maple.XScheduler
 {
 
-    public abstract class XSchedulerTaskClosure : IDisposable
+    public abstract class XSchedulerTaskClosure() : GCPinnedSelf
     {
-
-        MPinned<XSchedulerTaskClosure> Pinned { get; }
-        public nint Handle => Pinned.Handle;
-        public XSchedulerTaskClosure()
-        {
-            Pinned = new MPinned<XSchedulerTaskClosure>(this);
-        }
-
         public abstract void TryExecute();
-
-        public void Dispose()
-        {
-            this.Pinned.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
 
         public static implicit operator nint(XSchedulerTaskClosure closure) => closure.Handle;
     }
 
-    public abstract class XSchedulerTaskClosure<TResult> 
+    public abstract class XSchedulerTaskClosure<TResult>
         : XSchedulerTaskClosure
     {
         /// <summary>
@@ -65,7 +52,7 @@
         public Task<TResult?> GetResultAsync(long seconds = 5L) => GetResultAsync(TimeSpan.FromSeconds(seconds));
     }
 
-    public abstract class XSchedulerTaskClosure<TService, TResult>(IXSchedulerContext<TService> schedulerContext) 
+    public abstract class XSchedulerTaskClosure<TService, TResult>(IXSchedulerContext<TService> schedulerContext)
         : XSchedulerTaskClosure<TResult>
         where TService : class
     {

@@ -25,11 +25,11 @@ namespace Maple.WindowsRuntimes
 
         [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
         [LibraryImport(LibraryUser32, EntryPoint = "CallWindowProcW", SetLastError = false)]
-        public static partial nint CallWindowProc(nint lpPrevWndFunc, HWND hWnd, EnumWindowMessage Msg, nint wParam, nint lParam);
+        public static partial nint CallWindowProc(nint lpPrevWndFunc, HWND hWnd, EnumWindowMsgCode Msg, nint wParam, nint lParam);
 
         [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
         [LibraryImport(LibraryUser32, EntryPoint = "DefWindowProcW", SetLastError = false)]
-        public static partial nint DefWindowProc(HWND hWnd, EnumWindowMessage Msg, nint wParam, nint lParam);
+        public static partial nint DefWindowProc(HWND hWnd, EnumWindowMsgCode Msg, nint wParam, nint lParam);
 
         [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
         [LibraryImport(LibraryUser32, EntryPoint = "SetWindowLongPtrW", SetLastError = false)]
