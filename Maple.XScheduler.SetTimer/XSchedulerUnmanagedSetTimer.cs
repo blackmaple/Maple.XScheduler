@@ -10,10 +10,7 @@ namespace Maple.XScheduler.SetTimer
 
         public ValueTask<bool> ExecAsync(XSchedulerTaskClosure taskClosure)
         {
-            if (this.MainWindowHandle == nint.Zero)
-            {
-                return XSchedulerException.Throw<ValueTask<bool>>("ERROR:MainWindowHandle");
-            }
+
             var b = SetTimer(this.MainWindowHandle, (nuint)taskClosure.Handle);
             return new ValueTask<bool>(b);
         }
