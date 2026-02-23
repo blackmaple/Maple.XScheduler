@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Maple.UnmanagedExtensions" Version="0.0.2-rc" />
+    <PackageReference Include="Maple.UnmanagedExtensions" Version="0.0.3-rc" />
   </ItemGroup>
 
 </Project>

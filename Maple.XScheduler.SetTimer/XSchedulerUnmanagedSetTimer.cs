@@ -4,16 +4,17 @@ using System.Runtime.InteropServices;
 
 namespace Maple.XScheduler.SetTimer
 {
-    internal class XSchedulerUnmanagedSetTimer : IXSchedulerUnmanaged
+    internal class XSchedulerUnmanagedSetTimer(nint hWnd) : IXSchedulerUnmanaged
     {
+        public nint MainWindowHandle { get; } = hWnd;
+
         public ValueTask<bool> ExecAsync(XSchedulerTaskClosure taskClosure)
         {
-            var hwnd = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
-            if (hwnd == nint.Zero)
+            if (this.MainWindowHandle == nint.Zero)
             {
-                return XSchedulerException.Throw<ValueTask<bool>>("NOT FOUND MainWindowHandle");
+                return XSchedulerException.Throw<ValueTask<bool>>("ERROR:MainWindowHandle");
             }
-            var b = SetTimer(hwnd, (nuint)taskClosure.Handle);
+            var b = SetTimer(this.MainWindowHandle, (nuint)taskClosure.Handle);
             return new ValueTask<bool>(b);
         }
 
@@ -31,7 +32,7 @@ namespace Maple.XScheduler.SetTimer
         static void TimerProc(nint hwnd, uint message, nuint nIDEvent, uint dwTime)
         {
             RTUser32.KillTimer(hwnd, nIDEvent);
-            if (MPinned<XSchedulerTaskClosure>.TryGet((nint)nIDEvent, out var taskClosure))
+            if (XSchedulerTaskClosure.TryGet<XSchedulerTaskClosure>((nint)nIDEvent, out var taskClosure))
             {
                 taskClosure.TryExecute();
             }

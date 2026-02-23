@@ -3,7 +3,7 @@
 namespace Maple.XScheduler
 {
 
-    public abstract class XSchedulerTaskClosure() : GCPinnedSelf
+    public abstract class XSchedulerTaskClosure() : GCNormalSelf
     {
         public abstract void TryExecute();
 
@@ -33,7 +33,7 @@ namespace Maple.XScheduler
             }
             catch (Exception ex)
             {
-                this.Executed.SetException(ex);
+                this.Executed.TrySetException(ex);
             }
         }
 

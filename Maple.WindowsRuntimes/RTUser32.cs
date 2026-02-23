@@ -36,9 +36,12 @@ namespace Maple.WindowsRuntimes
         public static partial nint SetWindowLongPtr(HWND hWnd, EnumGWLP nIndex, nint dwNewLong);
 
 
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
+        [LibraryImport(LibraryUser32, EntryPoint = "PostMessageW", SetLastError = false)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool PostMessage(HWND hWnd, EnumWindowMsgCode Msg, nint wParam, nint lParam);
 
 
-        
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct TimerProcWrapper(TimerProc v)
         {
@@ -46,7 +49,7 @@ namespace Maple.WindowsRuntimes
             public TimerProc Value = v;
         }
 
-       
+
     }
-  
+
 }
