@@ -6,26 +6,27 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Maple.XScheduler.WinMsg
+namespace Maple.Hook.WinMsg
 {
     using unsafe ExecUnmanagedCodeProc = delegate* unmanaged[Stdcall]<nint, void>;
-    class UnmanagedWindowsMsgLoopHook : GCNormalSelf
+    class WinMsgHook : GCNormalSelf
     {
         public ILogger Logger { get; }
-        public Func<WindowsMsgInfo, ValueTask> NotifyAsync { set; get; } = static (_) => ValueTask.CompletedTask;
-        UnmanagedWindowsMsgChannel Channel { get; }
+        public Func<WindowsMsgInfo<WinMsgHook>, ValueTask> AsyncCallback { set; get; } = static (_) => ValueTask.CompletedTask;
+        public Func<nint, EnumWindowMsgCode, nint, nint, WinMsgHook, bool> SyncCallback { set; get; } = static (_, _, _, _, _) => false;
+        WinMsgChannel Channel { get; }
         nint MainWindowHandle { get; }
-        public UnmanagedWindowsMsgLoopHook(ILogger<UnmanagedWindowsMsgLoopHook> logger, nint hWnd)
+        public WinMsgHook(ILogger<WinMsgHook> logger, nint hWnd)
         {
             this.Logger = logger;
             this.MainWindowHandle = hWnd;
-            this.Channel = new UnmanagedWindowsMsgChannel(this);
+            this.Channel = new WinMsgChannel(this);
         }
 
-        public static UnmanagedWindowsMsgLoopHook Create(IServiceProvider serviceProvider, nint hWnd)
+        public static WinMsgHook Create(IServiceProvider serviceProvider, nint hWnd)
         {
-            var logger = serviceProvider.GetRequiredService<ILogger<UnmanagedWindowsMsgLoopHook>>();
-            return new UnmanagedWindowsMsgLoopHook(logger, hWnd);
+            var logger = serviceProvider.GetRequiredService<ILogger<WinMsgHook>>();
+            return new WinMsgHook(logger, hWnd);
         }
 
         public void Run()
@@ -56,20 +57,12 @@ namespace Maple.XScheduler.WinMsg
         {
             try
             {
-                if (UnmanagedWindowsMsgLoopHook.TryGet<UnmanagedWindowsMsgLoopHook>((nint)dwRefData, out var hook))
+                if (WinMsgHook.TryGet<WinMsgHook>((nint)dwRefData, out var hook))
                 {
-                    if (msg == EnumWindowMsgCode.USER_EXEC_CODE)
+                    hook.Channel.TryWriteMsg(new WindowsMsgInfo<WinMsgHook>(hook) { WParam = wParam, LParam = lParam, Msg = msg  });
+                    if(hook.SyncCallback(hWnd, msg, wParam, lParam, hook))
                     {
-                        if (lParam != nint.Zero)
-                        {
-                            var procPtr = (ExecUnmanagedCodeProc)lParam;
-                            procPtr(lParam);
-                        }
                         return nint.Zero;
-                    }
-                    else if (msg == EnumWindowMsgCode.WM_CLOSE)
-                    {
-                        hook.Close();
                     }
                 }
             }

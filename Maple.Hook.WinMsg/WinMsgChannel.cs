@@ -2,12 +2,12 @@
 using Microsoft.Extensions.Logging;
 using System.Threading.Channels;
 
-namespace Maple.XScheduler.WinMsg
+namespace Maple.Hook.WinMsg
 {
-    class UnmanagedWindowsMsgChannel(UnmanagedWindowsMsgLoopHook hook)
+    class WinMsgChannel(WinMsgHook hook)
     {
         Channel<WindowsMsgInfo> MsgChannel { get; } = Channel.CreateUnbounded<WindowsMsgInfo>();
-        UnmanagedWindowsMsgLoopHook Hook { get; } = hook;
+        WinMsgHook Hook { get; } = hook;
         ILogger Logger => Hook.Logger;
         Func<WindowsMsgInfo, ValueTask> NotifyAsync => Hook.NotifyAsync;
 
