@@ -1,8 +1,8 @@
 ﻿namespace Maple.XScheduler
 {
-    internal sealed class XSchedulerTaskClosure_FuncArgs<TService, TArgs, TResult>(IXSchedulerContext<TService> schedulerContext, TArgs args, Func<TService, TArgs, TResult> func)
-    : XSchedulerTaskClosure<TService, TResult>(schedulerContext)
-    where TService : class
+    internal sealed class XSchedulerTaskClosure_FuncArgs<TService, TArgs, TResult>(TService service, TArgs args, Func<TService, TArgs, TResult> func)
+    : XSchedulerTaskClosure<TService, TResult>(service)
+    where TService : IXSchedulerContext
     where TArgs : notnull
 
     {

@@ -6,59 +6,33 @@ namespace Maple.XScheduler
 
     public static class XSchedulerExtensions
     {
-        public static async ValueTask<bool> XTaskAsync<TService>(
-            this IXSchedulerContext<TService> taskScheduler, Action<TService> action)
-            where TService : class
+        extension<TService>(TService service) where TService : IXSchedulerContext
         {
-            using var taskState = new XSchedulerTaskClosure_Action<TService>(taskScheduler, action);
-            if (await taskScheduler.SendAsync(taskState).ConfigureAwait(false))
+            public async Task<bool> XTaskAsync(Action<TService> action)
             {
-                return await taskState.GetResultAsync().ConfigureAwait(false);
+                using var taskClosure_Action = new XSchedulerTaskClosure_Action<TService>(service, action);
+                return await taskClosure_Action.ExecAsync().ConfigureAwait(false);
             }
 
-            return XSchedulerException.Throw<bool>($"METHOD ERROR {nameof(XTaskAsync)}");
-        }
-
-        public static async ValueTask<bool> XTaskAsync<TService, TArgs>(
-            this IXSchedulerContext<TService> taskScheduler, TArgs args, Action<TService, TArgs> actionArgs)
-            where TService : class
-            where TArgs : notnull
-        {
-            using var taskState = new XSchedulerTaskClosure_ActionArgs<TService, TArgs>(taskScheduler, args, actionArgs);
-            if (await taskScheduler.SendAsync(taskState).ConfigureAwait(false))
+            public async Task<bool> XTaskAsync<TArgs>(TArgs args, Action<TService, TArgs> actionArgs)
+                where TArgs : notnull
             {
-                return await taskState.GetResultAsync().ConfigureAwait(false);
+                using var taskClosure_ActionArgs = new XSchedulerTaskClosure_ActionArgs<TService, TArgs>(service, args, actionArgs);
+                return await taskClosure_ActionArgs.ExecAsync().ConfigureAwait(false);
             }
 
-            return XSchedulerException.Throw<bool>($"METHOD ERROR {nameof(XTaskAsync)}");
-        }
-
-        public static async ValueTask<TResult?> XTaskAsync<TService, TArgs, TResult>(
-            this IXSchedulerContext<TService> taskScheduler, TArgs args, Func<TService, TArgs, TResult> funcArgs)
-            where TService : class
-            where TArgs : notnull
-        {
-            using var taskState = new XSchedulerTaskClosure_FuncArgs<TService, TArgs, TResult>(taskScheduler, args, funcArgs);
-            if (await taskScheduler.SendAsync(taskState).ConfigureAwait(false))
+            public async Task<TResult?> XTaskAsync<TArgs, TResult>(TArgs args, Func<TService, TArgs, TResult> funcArgs)
+                where TArgs : notnull
             {
-                return await taskState.GetResultAsync().ConfigureAwait(false);
+                using var taskClosure_FuncArgs = new XSchedulerTaskClosure_FuncArgs<TService, TArgs, TResult>(service, args, funcArgs);
+                return await taskClosure_FuncArgs.ExecAsync().ConfigureAwait(false);
             }
 
-            return XSchedulerException.Throw<TResult>($"METHOD ERROR {nameof(XTaskAsync)}");
-        }
-
-        public static async ValueTask<TResult?> XTaskAsync<TService, TResult>(
-            this IXSchedulerContext<TService> taskScheduler, Func<TService, TResult> func)
-            where TService : class
-        {
-            using var taskState = new XSchedulerTaskClosure_Func<TService, TResult>(taskScheduler, func);
-            if (await taskScheduler.SendAsync(taskState).ConfigureAwait(false))
+            public async Task<TResult?> XTaskAsync<TResult>(Func<TService, TResult> func)
             {
-                return await taskState.GetResultAsync().ConfigureAwait(false);
+                using var taskClosure_Func = new XSchedulerTaskClosure_Func<TService, TResult>(service, func);
+                return await taskClosure_Func.ExecAsync().ConfigureAwait(false);
             }
-
-            return XSchedulerException.Throw<TResult>($"METHOD ERROR {nameof(XTaskAsync)}");
         }
-
     }
 }

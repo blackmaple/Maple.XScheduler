@@ -39,7 +39,7 @@ namespace Maple.XScheduler
 
         protected abstract TResult? ExecuteImp();
 
-        public async Task<TResult?> GetResultAsync(TimeSpan timeSpan)
+        protected async Task<TResult?> GetResultAsync(TimeSpan timeSpan)
         {
             //5秒内未执行 则丢出time out
             if (await this.Executing.Task.WaitAsync(timeSpan).ConfigureAwait(false))
@@ -49,16 +49,24 @@ namespace Maple.XScheduler
             }
             return XSchedulerException.Throw<TResult>($"METHOD ERROR {nameof(GetResultAsync)}");
         }
-        public Task<TResult?> GetResultAsync(long seconds = 5L) => GetResultAsync(TimeSpan.FromSeconds(seconds));
+        protected Task<TResult?> GetResultAsync(long seconds = 5L) => GetResultAsync(TimeSpan.FromSeconds(seconds));
+
     }
 
-    public abstract class XSchedulerTaskClosure<TService, TResult>(IXSchedulerContext<TService> schedulerContext)
+    public abstract class XSchedulerTaskClosure<TService, TResult>(TService service)
         : XSchedulerTaskClosure<TResult>
-        where TService : class
+        where TService : IXSchedulerContext
     {
-        protected IXSchedulerContext<TService> SchedulerContext { get; } = schedulerContext;
-        protected TService Service => this.SchedulerContext.Service;
+        protected TService Service { get; } = service;
+        protected IXSchedulerUnmanaged Unmanaged => Service.Unmanaged;
 
-
+        public async Task<TResult?> ExecAsync()
+        {
+            if (await this.Unmanaged.ExecAsync(this).ConfigureAwait(false))
+            {
+                return await this.GetResultAsync().ConfigureAwait(false);
+            }
+            return XSchedulerException.Throw<TResult?>($"METHOD ERROR {nameof(ExecAsync)}");
+        }
     }
 }

@@ -2,9 +2,9 @@
 {
 
 
-    internal sealed class XSchedulerTaskClosure_Func<TService, TResult>(IXSchedulerContext<TService> schedulerContext, Func<TService, TResult> func)
-        : XSchedulerTaskClosure<TService, TResult>(schedulerContext)
-        where TService : class
+    internal sealed class XSchedulerTaskClosure_Func<TService, TResult>(TService service, Func<TService, TResult> func)
+        : XSchedulerTaskClosure<TService, TResult>(service)
+        where TService : IXSchedulerContext
     {
         public Func<TService, TResult?> Func { get; } = func;
 

@@ -1,8 +1,8 @@
 ﻿namespace Maple.XScheduler
 {
-    internal sealed class XSchedulerTaskClosure_Action<TService>(IXSchedulerContext<TService> schedulerContext, Action<TService> action)
-    : XSchedulerTaskClosure<TService, bool>(schedulerContext)
-    where TService : class
+    internal sealed class XSchedulerTaskClosure_Action<TService>(TService service, Action<TService> action)
+    : XSchedulerTaskClosure<TService, bool>(service)
+    where TService : IXSchedulerContext
     {
         public Action<TService> Action { get; } = action;
 
