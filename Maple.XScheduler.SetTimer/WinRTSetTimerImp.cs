@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Maple.XScheduler.SetTimer
 {
-    internal class XSchedulerUnmanagedSetTimer(nint hWnd) : IXSchedulerUnmanaged
+    internal class WinRTSetTimerImp(nint hWnd) : IXSchedulerUnmanaged
     {
         public nint MainWindowHandle { get; } = hWnd;
 

@@ -35,7 +35,7 @@ namespace Maple.WindowsRuntimes
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct SubclassProcWrapper(SubclassProc v)
         {
-            [MarshalAs(UnmanagedType.SysInt)]
+           // [MarshalAs(UnmanagedType.SysInt)]
             public SubclassProc Value = v;
         }
     }

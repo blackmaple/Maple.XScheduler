@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="Maple.Hook.WinMsg/Maple.Hook.WinMsg.csproj" Id="ed3d6e83-a15d-4af4-86a4-45d3f9e9b3f0" />
   <Project Path="Maple.WindowsRuntimes/Maple.WindowsRuntimes.csproj" />
+  <Project Path="Maple.WinForm.Test/Maple.WinForm.Test.csproj" Id="5c7d94f6-af50-49e2-9f80-8cb019bb5241" />
   <Project Path="Maple.XScheduler.SetTimer/Maple.XScheduler.SetTimer.csproj" />
   <Project Path="Maple.XScheduler.WinMsg/Maple.XScheduler.WinMsg.csproj" />
   <Project Path="Maple.XScheduler/Maple.XScheduler.csproj" />

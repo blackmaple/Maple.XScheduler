@@ -39,13 +39,13 @@ namespace Maple.WindowsRuntimes
         [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
         [LibraryImport(LibraryUser32, EntryPoint = "PostMessageW", SetLastError = false)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool PostMessage(HWND hWnd, EnumWindowMsgCode Msg, nint wParam, nint lParam);
+        public static partial bool PostMessage(HWND hWnd, EnumWindowMsgCode Msg, nint wParam, nint lParam);
 
 
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct TimerProcWrapper(TimerProc v)
         {
-            [MarshalAs(UnmanagedType.SysInt)]
+            //[MarshalAs(UnmanagedType.SysInt)]
             public TimerProc Value = v;
         }
 

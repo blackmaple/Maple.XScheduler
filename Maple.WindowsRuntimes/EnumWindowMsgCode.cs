@@ -6,7 +6,7 @@
         WM_QUIT = 0x0012,
         WM_CLOSE = 0x0010,
         WM_KEYDOWN = 0x0100,
-
+        WM_COMMAND = 0x111,
         WM_USER = 0x0400,
 
 
