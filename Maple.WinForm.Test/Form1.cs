@@ -10,7 +10,7 @@ namespace Maple.WinForm.Test
     {
         WinMsgHookItem HookItem { get; }
         public IXSchedulerUnmanaged Scheduler { get; }
-        public Form1(WinMsgHookFactory hookFactory)
+        public Form1(WinMsgHookFactory hookFactory, IXSchedulerProvider<WinMsgHookItem> schedulerProvider)
         {
             InitializeComponent();
 
@@ -33,12 +33,12 @@ namespace Maple.WinForm.Test
             };
             this.HookItem.EnabledAsyncCallback = true;
 
-            this.HookItem.Start();
+           
 
             //    this.Scheduler = WinMsgUserExtensions.CreateXScheduler(this, this.Handle, this.HookItem);
-            this.Scheduler = WinRTSetTimerExtensions.CreateXScheduler(this, this.Handle);
+            this.Scheduler = schedulerProvider.Create(this.Handle,this.HookItem);
 
-
+            this.HookItem.Start();
         }
 
         private async void button1_Click(object sender, EventArgs e)

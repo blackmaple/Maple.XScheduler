@@ -19,7 +19,7 @@ namespace Maple.XScheduler.WinMsg
             this.HookItem = hookItem;
             this.HookItem.SyncCallback += OnSyncCallback;
             this.HookItem.EnabledSyncCallback = true;
-            this.HookItem.Start();
+     //       this.HookItem.Start();
         }
 
         public ValueTask<bool> ExecAsync(XSchedulerTaskClosure taskClosure)

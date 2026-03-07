@@ -1,20 +1,23 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.Diagnostics;
 
 namespace Maple.XScheduler.SetTimer
 {
     public static class WinRTSetTimerExtensions
     {
-        extension(IXSchedulerContext @this)
+        extension(IServiceCollection @this)
         {
-            public IXSchedulerUnmanaged CreateXScheduler(nint hWnd)
+
+            public IServiceCollection AddWinRTSetTimerProvider()
             {
-                return new WinRTSetTimerImp(hWnd);
+                @this.TryAddSingleton<IXSchedulerProvider, WinRTSetTimerProvider>();
+ 
+                return @this;
             }
+
         }
     }
 
 
-     
+
 }
