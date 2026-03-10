@@ -11,9 +11,9 @@ namespace Maple.XScheduler.WinMsg
 
             public IServiceCollection AddWinMsgUserProvider()
             {
-                @this.TryAddSingleton<WinMsgUserProvider>();
-                @this.TryAddSingleton<IXSchedulerProvider<WinMsgHookItem>>(p => p.GetRequiredService<WinMsgUserProvider>());
-                @this.TryAddSingleton<IXSchedulerProvider>(p => p.GetRequiredService<IXSchedulerProvider<WinMsgHookItem>>());
+                @this.TryAddSingleton<WinMsgUserFactory>();
+                @this.TryAddSingleton<IXSchedulerFactory<WinMsgHookItem>>(p => p.GetRequiredService<WinMsgUserFactory>());
+                @this.TryAddSingleton<IXSchedulerFactory>(p => p.GetRequiredService<IXSchedulerFactory<WinMsgHookItem>>());
                 return @this;
             }
 

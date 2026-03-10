@@ -10,7 +10,7 @@ namespace Maple.XScheduler.SetTimer
 
             public IServiceCollection AddWinRTSetTimerProvider()
             {
-                @this.TryAddSingleton<IXSchedulerProvider, WinRTSetTimerProvider>();
+                @this.TryAddSingleton<IXSchedulerFactory, WinRTSetTimerFactory>();
  
                 return @this;
             }

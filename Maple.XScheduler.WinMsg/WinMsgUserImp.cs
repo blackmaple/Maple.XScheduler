@@ -1,7 +1,7 @@
 ﻿using Maple.Hook.WinMsg;
-using Maple.WindowsRuntimes;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 
 namespace Maple.XScheduler.WinMsg
 {
@@ -19,7 +19,7 @@ namespace Maple.XScheduler.WinMsg
             this.HookItem = hookItem;
             this.HookItem.SyncCallback += OnSyncCallback;
             this.HookItem.EnabledSyncCallback = true;
-     //       this.HookItem.Start();
+            //       this.HookItem.Start();
         }
 
         public ValueTask<bool> ExecAsync(XSchedulerTaskClosure taskClosure)
@@ -31,7 +31,7 @@ namespace Maple.XScheduler.WinMsg
         unsafe static bool PostMessage(nint hwnd, nint userData)
         {
             ExecUnmanagedCodeProc procPtr = &UserExecCodeProc;
-            return RTUser32.PostMessage(hwnd, EnumWindowMsgCode.USER_EXEC_CODE, (nint)procPtr, userData);
+            return PInvoke.PostMessage(new Windows.Win32.Foundation.HWND(hwnd), (uint)EnumWindowMsgCode.USER_EXEC_CODE, new Windows.Win32.Foundation.WPARAM((nuint)procPtr), userData);
         }
 
 
@@ -45,9 +45,9 @@ namespace Maple.XScheduler.WinMsg
             }
         }
 
-        unsafe static bool OnSyncCallback(nint hwnd, EnumWindowMsgCode msgCode, nint wParam, nint lParam, WinMsgHookItem _)
+        unsafe static bool OnSyncCallback(nint hwnd, uint msgCode, nuint wParam, nint lParam, WinMsgHookItem _)
         {
-            if (msgCode == EnumWindowMsgCode.USER_EXEC_CODE)
+            if (msgCode == (uint)EnumWindowMsgCode.USER_EXEC_CODE)
             {
                 ExecUnmanagedCodeProc procPtr = (ExecUnmanagedCodeProc)wParam;
                 procPtr(lParam);

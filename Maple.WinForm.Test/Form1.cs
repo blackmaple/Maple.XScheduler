@@ -1,8 +1,5 @@
 using Maple.Hook.WinMsg;
-using Maple.WindowsRuntimes;
 using Maple.XScheduler;
-using Maple.XScheduler.SetTimer;
-using Maple.XScheduler.WinMsg;
 
 namespace Maple.WinForm.Test
 {
@@ -10,7 +7,7 @@ namespace Maple.WinForm.Test
     {
         WinMsgHookItem HookItem { get; }
         public IXSchedulerUnmanaged Scheduler { get; }
-        public Form1(WinMsgHookFactory hookFactory, IXSchedulerProvider<WinMsgHookItem> schedulerProvider)
+        public Form1(WinMsgHookFactory hookFactory, IXSchedulerFactory schedulerProvider)
         {
             InitializeComponent();
 
@@ -36,7 +33,7 @@ namespace Maple.WinForm.Test
            
 
             //    this.Scheduler = WinMsgUserExtensions.CreateXScheduler(this, this.Handle, this.HookItem);
-            this.Scheduler = schedulerProvider.Create(this.Handle,this.HookItem);
+            this.Scheduler = schedulerProvider.Create(this.Handle );
 
             this.HookItem.Start();
         }

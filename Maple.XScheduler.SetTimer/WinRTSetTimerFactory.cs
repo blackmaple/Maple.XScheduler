@@ -2,7 +2,7 @@
 
 namespace Maple.XScheduler.SetTimer
 {
-    public class WinRTSetTimerProvider : IXSchedulerProvider
+    public class WinRTSetTimerFactory : IXSchedulerFactory
     {
         public IXSchedulerUnmanaged Create(nint hWnd)
         {

@@ -1,12 +1,14 @@
 ﻿namespace Maple.XScheduler
 {
-    public interface IXSchedulerProvider
+    public interface IXSchedulerFactory
     {
         IXSchedulerUnmanaged Create( );
         IXSchedulerUnmanaged Create(nint hWnd);
 
     }
-    public interface IXSchedulerProvider<T> : IXSchedulerProvider
+
+
+    public interface IXSchedulerFactory<T> : IXSchedulerFactory
     {
         IXSchedulerUnmanaged Create(nint hWnd, T raw);
 

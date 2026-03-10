@@ -11,9 +11,7 @@ namespace Maple.Hook.WinMsg
         private WinMsgHookItem CreateImp(nint hWnd)
         {
             var loopService = this.Provider.GetRequiredService<WinMsgLoopService>();
-            var loggerFactory = this.Provider.GetRequiredService<ILoggerFactory>();
-            var logger = loggerFactory.CreateLogger($"{nameof(WinMsgHookItem)}_{hWnd:X8}");
-            return new WinMsgHookItem(logger, hWnd, loopService);
+            return new WinMsgHookItem(hWnd, loopService);
         }
 
         public WinMsgHookItem Create(nint hWnd) => this.Cache.GetOrAdd(hWnd, CreateImp);

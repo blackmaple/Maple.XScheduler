@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Maple.XScheduler.WinMsg
 {
-    public class WinMsgUserProvider(WinMsgHookFactory hookFactory) : IXSchedulerProvider<WinMsgHookItem>
+    public class WinMsgUserFactory(WinMsgHookFactory hookFactory) : IXSchedulerFactory<WinMsgHookItem>
     {
 
         WinMsgHookFactory HookFactory { get; } = hookFactory;

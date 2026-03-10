@@ -1,0 +1,3 @@
+﻿SetTimer
+KillTimer
+USER_TIMER_MINIMUM

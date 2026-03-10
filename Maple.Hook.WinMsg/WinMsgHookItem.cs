@@ -1,16 +1,18 @@
 ﻿using Maple.UnmanagedExtensions;
-using Maple.WindowsRuntimes;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace Maple.Hook.WinMsg
 {
-    public class WinMsgHookItem(ILogger logger, nint hWnd, WinMsgLoopService loopService) : GCNormalSelf
+    public class WinMsgHookItem(nint hWnd, WinMsgLoopService loopService) : GCNormalSelf
     {
-        ILogger Logger { get; } = logger;
+
         WinMsgLoopService LoopService { get; } = loopService;
-        void PushMsg(nint hWnd, EnumWindowMsgCode msgCode, nint w, nint l)
+        void PushMsg(nint _, uint msgCode, nuint w, nint l)
         {
             if (this.EnabledAsyncCallback)
             {
@@ -29,8 +31,8 @@ namespace Maple.Hook.WinMsg
         }
 
         public bool EnabledSyncCallback { set; get; }
-        public Func<nint, EnumWindowMsgCode, nint, nint, WinMsgHookItem, bool>? SyncCallback { set; get; }
-        internal bool OnSyncCallback(nint hWnd, EnumWindowMsgCode msgCode, nint w, nint l, WinMsgHookItem hookItem)
+        public Func<nint, uint, nuint, nint, WinMsgHookItem, bool>? SyncCallback { set; get; }
+        internal bool OnSyncCallback(nint hWnd, uint msgCode, nuint w, nint l, WinMsgHookItem hookItem)
         {
             if (this.EnabledSyncCallback && this.SyncCallback is not null)
             {
@@ -55,17 +57,16 @@ namespace Maple.Hook.WinMsg
 
         private unsafe bool SetHook()
         {
-            return RTComCtl32.SetWindowSubclass(this.MainWindowHandle, new RTComCtl32.SubclassProcWrapper(&CallbackSubclassProc), (nuint)this.Handle, (nuint)this.Handle);
+            return PInvoke.SetWindowSubclass(new HWND(this.MainWindowHandle), &CallbackSubclassProc, (nuint)this.Handle, (nuint)this.Handle);
 
         }
         private unsafe bool RemoveHook()
         {
-            return RTComCtl32.RemoveWindowSubclass(this.MainWindowHandle, new RTComCtl32.SubclassProcWrapper(&CallbackSubclassProc), (nuint)this.Handle);
+            return PInvoke.RemoveWindowSubclass(new HWND(this.MainWindowHandle), &CallbackSubclassProc, (nuint)this.Handle);
 
         }
-
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        static nint CallbackSubclassProc(nint hWnd, EnumWindowMsgCode msg, nint wParam, nint lParam, nuint uIdSubclass, nuint dwRefData)
+        static LRESULT CallbackSubclassProc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam, nuint uIdSubclass, nuint dwRefData)
         {
             try
             {
@@ -75,7 +76,7 @@ namespace Maple.Hook.WinMsg
 
                     if (hook.OnSyncCallback(hWnd, msg, wParam, lParam, hook) == true)
                     {
-                        return nint.Zero;
+                        return new LRESULT(nint.Zero);
                     }
                 }
             }
@@ -83,7 +84,7 @@ namespace Maple.Hook.WinMsg
             {
 
             }
-            return RTComCtl32.DefSubclassProc(hWnd, msg, wParam, lParam);
+            return PInvoke.DefSubclassProc(hWnd, msg, wParam, lParam);
 
         }
 
