@@ -8,17 +8,36 @@
 		<DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
 		<CsWin32RunAsBuildTask>true</CsWin32RunAsBuildTask>
 
-
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>Maple.Hook.WinMsg</Title>
+		<RepositoryUrl>https://github.com/blackmaple/Maple.XScheduler</RepositoryUrl>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<Description>dotNet Maple.Hook.WinMsg</Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageTags>hook;c#;dotnet;AOT</PackageTags>
+		<Version>0.26.0324.01-rc</Version>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Maple.UnmanagedExtensions" Version="0.0.3-rc" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.3" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
+		<None Include="..\LICENSE" Link="LICENSE">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
+		<None Include="..\README.md" Link="README.md">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Maple.UnmanagedExtensions" Version="0.26.319.4-rc" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" />
 		<PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.269">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
