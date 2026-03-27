@@ -16,7 +16,7 @@
 		<Description>dotNet Maple.Hook.WinMsg</Description>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageTags>hook;c#;dotnet;AOT</PackageTags>
-		<Version>0.26.0325.01-rc</Version>
+		<Version>0.26.0327.01-rc</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\LICENSE" Link="LICENSE">
@@ -30,7 +30,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Maple.UnmanagedExtensions" Version="0.26.319.4-rc" />
+		<PackageReference Include="Maple.UnmanagedExtensions" Version="0.26.327.5-rc" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
 	</ItemGroup>

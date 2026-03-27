@@ -1,5 +1,6 @@
 ﻿using Maple.UnmanagedExtensions;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -8,10 +9,20 @@ using Windows.Win32.Foundation;
 
 namespace Maple.Hook.WinMsg
 {
-    public class WinMsgHookItem(nint hWnd, WinMsgLoopService loopService) : GCNormalSelf
+    public class WinMsgHookItem : IDisposable
     {
 
-        WinMsgLoopService LoopService { get; } = loopService;
+        WinMsgLoopService LoopService { get; }
+        nint MainWindowHandle { get; }
+        GCNormalObject<WinMsgHookItem> GCNormalObject { get; }
+        nint Handle => this.GCNormalObject.Handle;
+
+        public AdditionalContentManager AdditionalContent { get; } = new();
+
+       
+
+
+
         void PushMsg(nint _, uint msgCode, nuint w, nint l)
         {
             if (this.EnabledAsyncCallback)
@@ -42,8 +53,15 @@ namespace Maple.Hook.WinMsg
         }
 
 
+        public WinMsgHookItem(nint hWnd, WinMsgLoopService loopService)
+        {
+            this.MainWindowHandle = hWnd;
+            this.LoopService = loopService;
+            this.GCNormalObject = new GCNormalObject<WinMsgHookItem>(this);
+        }
 
-        nint MainWindowHandle { get; } = hWnd;
+
+    
 
         public bool Start()
         {
@@ -70,7 +88,7 @@ namespace Maple.Hook.WinMsg
         {
             try
             {
-                if (WinMsgHookItem.TryGet<WinMsgHookItem>((nint)dwRefData, out var hook))
+                if (GCNormalObject<WinMsgHookItem>.TryGet((nint)dwRefData, out var hook))
                 {
                     hook.PushMsg(hWnd, msg, wParam, lParam);
 
@@ -88,6 +106,17 @@ namespace Maple.Hook.WinMsg
 
         }
 
-
+        public void Dispose()
+        {
+            this.Stop();
+            this.EnabledSyncCallback = false;
+            this.EnabledAsyncCallback = false;
+            this.SyncCallback = default;
+            this.AsyncCallback = default;
+           
+            this.GCNormalObject.Dispose();
+            this.AdditionalContent.Clear();
+            GC.SuppressFinalize(this);
+        }
     }
 }
