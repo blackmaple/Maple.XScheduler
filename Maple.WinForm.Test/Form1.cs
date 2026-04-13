@@ -6,7 +6,7 @@ namespace Maple.WinForm.Test
     public partial class Form1 : Form, IXSchedulerContext
     {
         WinMsgHookItem HookItem { get; }
-        public IXSchedulerUnmanaged Scheduler { get; }
+        public IXSchedulerUnmanaged XScheduler { get; }
         public Form1(WinMsgHookFactory hookFactory, IXSchedulerFactory schedulerProvider)
         {
             InitializeComponent();
@@ -30,12 +30,20 @@ namespace Maple.WinForm.Test
             };
             this.HookItem.EnabledAsyncCallback = true;
 
-           
 
+         //   WindowLongNativeMethods.GetCurrentThread("Form1");
             //    this.Scheduler = WinMsgUserExtensions.CreateXScheduler(this, this.Handle, this.HookItem);
-            this.Scheduler = schedulerProvider.Create(this.Handle );
+            this.XScheduler = schedulerProvider.Create(this.Handle );
+            Task.Factory.StartNew(() => {
+             //   WindowLongNativeMethods.GetCurrentThread("StartNew");
+                this.HookItem.Start();
 
-            this.HookItem.Start();
+            },TaskCreationOptions.LongRunning);
+            Task.Factory.StartNew(() => {
+                Thread.Sleep(5000);
+              //  this.HookItem.Stop();
+
+            }, TaskCreationOptions.LongRunning);
         }
 
         private async void button1_Click(object sender, EventArgs e)

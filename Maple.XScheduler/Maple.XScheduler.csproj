@@ -13,7 +13,7 @@
 		<Description>dotNet Maple.XScheduler</Description>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageTags>hook;c#;dotnet;AOT</PackageTags>
-		<Version>0.26.0324.01-rc</Version>
+		<Version>0.26.0413.01-rc</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\LICENSE" Link="LICENSE">
@@ -27,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Maple.UnmanagedExtensions" Version="0.26.319.4-rc" />
+		<PackageReference Include="Maple.UnmanagedExtensions" Version="0.26.327.5-rc" />
 	</ItemGroup>
 
 </Project>

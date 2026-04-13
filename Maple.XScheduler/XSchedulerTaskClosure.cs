@@ -58,7 +58,7 @@ namespace Maple.XScheduler
         where TService : IXSchedulerContext
     {
         protected TService Service { get; } = service;
-        protected IXSchedulerUnmanaged Unmanaged => Service.Scheduler;
+        protected IXSchedulerUnmanaged Unmanaged => Service.XScheduler;
 
         public async Task<TResult?> ExecAsync()
         {

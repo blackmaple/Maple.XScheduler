@@ -1,3 +1,10 @@
 ﻿SetWindowSubclass
 RemoveWindowSubclass
 DefSubclassProc
+SetTimer
+KillTimer
+USER_TIMER_MINIMUM
+WINDOW_LONG_PTR_INDEX
+CallWindowProc
+DefWindowProc
+GetCurrentThreadId

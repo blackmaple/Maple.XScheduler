@@ -4,7 +4,7 @@
     {
         
 
-        IXSchedulerUnmanaged Scheduler { get; }
+        IXSchedulerUnmanaged XScheduler { get; }
 
       //  public ValueTask<bool> SendAsync(XSchedulerTaskClosure closure) => this.Unmanaged.ExecAsync(closure);
     }
