@@ -21,7 +21,7 @@ namespace Maple.XScheduler
         /// <summary>
         /// 执行完成
         /// </summary>
-        protected TaskCompletionSource<TResult?> Executed { get; } = new TaskCompletionSource<TResult?>();
+        protected TaskCompletionSource<TResult> Executed { get; } = new TaskCompletionSource<TResult>();
 
         public sealed override void TryExecute()
         {
@@ -37,9 +37,9 @@ namespace Maple.XScheduler
             }
         }
 
-        protected abstract TResult? ExecuteImp();
+        protected abstract TResult ExecuteImp();
 
-        protected async Task<TResult?> GetResultAsync(TimeSpan timeSpan)
+        protected async Task<TResult> GetResultAsync(TimeSpan timeSpan)
         {
             //5秒内未执行 则丢出time out
             if (await this.Executing.Task.WaitAsync(timeSpan).ConfigureAwait(false))
@@ -49,7 +49,7 @@ namespace Maple.XScheduler
             }
             return XSchedulerException.Throw<TResult>($"METHOD ERROR {nameof(GetResultAsync)}");
         }
-        protected Task<TResult?> GetResultAsync(long seconds = 5L) => GetResultAsync(TimeSpan.FromSeconds(seconds));
+        protected Task<TResult> GetResultAsync(long seconds = 5L) => GetResultAsync(TimeSpan.FromSeconds(seconds));
 
     }
 
@@ -60,13 +60,13 @@ namespace Maple.XScheduler
         protected TService Service { get; } = service;
         protected IXSchedulerUnmanaged Unmanaged => Service.XScheduler;
 
-        public async Task<TResult?> ExecAsync()
+        public async Task<TResult> ExecAsync()
         {
             if (await this.Unmanaged.ExecAsync(this).ConfigureAwait(false))
             {
                 return await this.GetResultAsync().ConfigureAwait(false);
             }
-            return XSchedulerException.Throw<TResult?>($"METHOD ERROR {nameof(ExecAsync)}");
+            return XSchedulerException.Throw<TResult>($"METHOD ERROR {nameof(ExecAsync)}");
         }
     }
 }

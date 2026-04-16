@@ -6,9 +6,9 @@
     where TArgs : notnull
 
     {
-        public Func<TService, TArgs, TResult?> Func { get; } = func;
+        public Func<TService, TArgs, TResult> Func { get; } = func;
         public TArgs Args { get; } = args;
-        protected sealed override TResult? ExecuteImp() => Func.Invoke(this.Service, this.Args);
+        protected sealed override TResult ExecuteImp() => Func.Invoke(this.Service, this.Args);
 
 
     }

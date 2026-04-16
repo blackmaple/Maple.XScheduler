@@ -6,9 +6,9 @@
         : XSchedulerTaskClosure<TService, TResult>(service)
         where TService : IXSchedulerContext
     {
-        public Func<TService, TResult?> Func { get; } = func;
+        public Func<TService, TResult> Func { get; } = func;
 
-        protected sealed override TResult? ExecuteImp() => Func.Invoke(this.Service);
+        protected sealed override TResult ExecuteImp() => Func.Invoke(this.Service);
 
 
     }

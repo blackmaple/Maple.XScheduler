@@ -16,7 +16,7 @@
 		<Description>dotNet Maple.XScheduler.SetTimer</Description>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageTags>hook;c#;dotnet;AOT</PackageTags>
-		<Version>0.26.0413.01-rc</Version>
+		<Version>0.26.0416.01-rc</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\LICENSE" Link="LICENSE">
